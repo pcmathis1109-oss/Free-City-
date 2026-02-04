@@ -7,7 +7,8 @@ percuter par les voitures pour gagner.
 ## Lancer la démo
 
 Ouvrez `index.html` dans un navigateur moderne. Utilisez les flèches ou WASD pour déplacer le
-personnage principal et atteindre 10 bonus.
+personnage principal et atteindre 10 bonus. Vous pouvez sprinter avec Shift, mettre en pause,
+ou réinitialiser la partie depuis les boutons de la scène.
 
 ## Obtenir un lien partageable
 

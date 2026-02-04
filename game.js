@@ -3,11 +3,15 @@ const ctx = canvas.getContext("2d");
 const overlay = document.getElementById("overlay");
 const startButton = document.getElementById("start");
 const toast = document.getElementById("toast");
+const togglePauseButton = document.getElementById("togglePause");
+const resetButton = document.getElementById("resetGame");
+const toggleThemeButton = document.getElementById("toggleTheme");
 
 const npcCountLabel = document.getElementById("npcCount");
 const playerCountLabel = document.getElementById("playerCount");
 const scoreLabel = document.getElementById("score");
 const timeLabel = document.getElementById("time");
+const progressBar = document.getElementById("progressBar");
 
 const width = canvas.width;
 const height = canvas.height;
@@ -16,6 +20,8 @@ const keys = new Set();
 let running = false;
 let score = 0;
 const targetScore = 10;
+let paused = false;
+let nightMode = false;
 
 const city = {
   buildings: [
@@ -75,10 +81,25 @@ window.addEventListener("keyup", (event) => {
 });
 
 startButton.addEventListener("click", () => {
-  running = true;
-  overlay.style.display = "none";
-  showToast("Trouve 10 bonus pour gagner !");
-  requestAnimationFrame(loop);
+  startGame();
+});
+
+togglePauseButton.addEventListener("click", () => {
+  if (!running) return;
+  paused = !paused;
+  togglePauseButton.textContent = paused ? "Reprendre" : "Pause";
+  showToast(paused ? "Pause activée" : "Pause retirée");
+});
+
+resetButton.addEventListener("click", () => {
+  resetGame();
+  showToast("Partie réinitialisée");
+});
+
+toggleThemeButton.addEventListener("click", () => {
+  nightMode = !nightMode;
+  document.body.classList.toggle("night", nightMode);
+  toggleThemeButton.textContent = nightMode ? "Mode jour" : "Mode nuit";
 });
 
 function createEntity({ type, x, y, color, sunglasses = false, speed }) {
@@ -144,8 +165,10 @@ function updatePlayer() {
   if (keys.has("arrowright") || keys.has("d")) dx += 1;
 
   const magnitude = Math.hypot(dx, dy) || 1;
-  player.x += (dx / magnitude) * player.speed;
-  player.y += (dy / magnitude) * player.speed;
+  const sprint = keys.has("shift");
+  const speedBoost = sprint ? 1.6 : 1;
+  player.x += (dx / magnitude) * player.speed * speedBoost;
+  player.y += (dy / magnitude) * player.speed * speedBoost;
 
   player.x = clamp(player.x, 60, width - 60);
   player.y = clamp(player.y, 210, height - 40);
@@ -282,6 +305,10 @@ function updateClock() {
 
 function loop() {
   if (!running) return;
+  if (paused) {
+    requestAnimationFrame(loop);
+    return;
+  }
   updateClock();
   updatePlayer();
 
@@ -312,6 +339,7 @@ function updateCars() {
     if (intersectsPlayer(car)) {
       score = Math.max(0, score - 1);
       scoreLabel.textContent = score.toString();
+      updateProgress();
       player.x = width * 0.5;
       player.y = height * 0.7;
       showToast("Aïe ! Une voiture t'a touché.");
@@ -325,15 +353,11 @@ function checkCollectibles() {
     if (distance < 18) {
       score += 1;
       scoreLabel.textContent = score.toString();
+      updateProgress();
       collectibles[index] = createCollectible();
       showToast("Bonus récupéré !");
       if (score >= targetScore) {
-        running = false;
-        overlay.style.display = "grid";
-        overlay.querySelector("h2").textContent = "Bravo !";
-        overlay.querySelector("p").textContent =
-          "Tu as atteint " + targetScore + " bonus. Relance la scène pour rejouer.";
-        startButton.textContent = "Rejouer";
+        finishGame();
       }
     }
   });
@@ -359,4 +383,46 @@ function showToast(message) {
   }, 1600);
 }
 
+function updateProgress() {
+  const percent = Math.min((score / targetScore) * 100, 100);
+  progressBar.style.width = `${percent}%`;
+}
+
+function startGame() {
+  running = true;
+  paused = false;
+  togglePauseButton.textContent = "Pause";
+  overlay.style.display = "none";
+  showToast("Trouve 10 bonus pour gagner !");
+  requestAnimationFrame(loop);
+}
+
+function resetGame() {
+  score = 0;
+  scoreLabel.textContent = score.toString();
+  updateProgress();
+  player.x = width * 0.5;
+  player.y = height * 0.7;
+  collectibles.splice(0, collectibles.length, ...Array.from({ length: 6 }, () => createCollectible()));
+  cars.forEach((car, index) => {
+    car.x = index % 2 === 0 ? -80 - index * 120 : width + 80 + index * 120;
+  });
+  overlay.querySelector("h2").textContent = "Entrer dans Free City";
+  overlay.querySelector("p").textContent =
+    "La ville est vivante : les PNJ portent des lunettes de soleil, les joueurs réels se déplacent librement. Attrape les bonus, évite les voitures et gagne la partie !";
+  startButton.textContent = "Démarrer la scène";
+  overlay.style.display = "grid";
+  running = false;
+}
+
+function finishGame() {
+  running = false;
+  overlay.style.display = "grid";
+  overlay.querySelector("h2").textContent = "Bravo !";
+  overlay.querySelector("p").textContent =
+    "Tu as atteint " + targetScore + " bonus. Relance la scène pour rejouer.";
+  startButton.textContent = "Rejouer";
+}
+
 updateClock();
+updateProgress();

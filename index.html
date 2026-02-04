@@ -29,6 +29,10 @@
             <span class="badge">Objectif</span>
             <p>Atteins 10 bonus pour gagner</p>
           </div>
+          <div>
+            <span class="badge">Sprint</span>
+            <p>Maintiens Shift pour aller plus vite</p>
+          </div>
         </div>
       </div>
       <div class="stats">
@@ -48,12 +52,21 @@
           <p class="label">Heure</p>
           <p id="time" class="value">--:--</p>
         </div>
+        <div class="progress">
+          <div class="progress-bar" id="progressBar"></div>
+          <p class="progress-label">Progression vers la victoire</p>
+        </div>
       </div>
     </header>
 
     <main>
       <div class="game-shell">
         <canvas id="city" width="960" height="540" aria-label="Ville Free City"></canvas>
+        <div class="actions">
+          <button id="togglePause" class="secondary">Pause</button>
+          <button id="resetGame" class="secondary">Recommencer</button>
+          <button id="toggleTheme" class="secondary">Mode nuit</button>
+        </div>
         <div class="overlay" id="overlay">
           <h2>Entrer dans Free City</h2>
           <p>

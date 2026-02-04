@@ -96,6 +96,27 @@ h1 span {
   font-weight: 600;
 }
 
+.progress {
+  margin-top: 6px;
+  background: rgba(7, 11, 20, 0.6);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid rgba(122, 167, 255, 0.35);
+}
+
+.progress-bar {
+  height: 10px;
+  width: 0%;
+  background: linear-gradient(90deg, #ffd86b, #ff9b61);
+  transition: width 0.3s ease;
+}
+
+.progress-label {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: #8ea4c3;
+}
+
 .game-shell {
   position: relative;
   border-radius: 20px;
@@ -145,6 +166,34 @@ button {
 
 button:hover {
   transform: translateY(-2px);
+}
+
+.actions {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.secondary {
+  background: rgba(12, 18, 32, 0.9);
+  color: #ffd86b;
+  border: 1px solid rgba(122, 167, 255, 0.35);
+  font-size: 0.85rem;
+  padding: 8px 16px;
+}
+
+.night canvas {
+  background: #0a0f1f;
+}
+
+.night .game-shell {
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+}
+
+.night .overlay {
+  background: rgba(2, 6, 18, 0.82);
 }
 
 .toast {
