@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free City - Démo inspirée de Free Guy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Free City</p>
+        <h1>Bienvenue dans la ville façon <span>Free Guy</span></h1>
+        <p class="subtitle">
+          Une mini-démo jouable : la ville, des PNJ avec lunettes de soleil, et des joueurs réels
+          qui se baladent dans la même scène.
+        </p>
+        <div class="controls">
+          <div>
+            <span class="badge">Déplacement</span>
+            <p>Flèches ou WASD</p>
+          </div>
+          <div>
+            <span class="badge">Interaction</span>
+            <p>Attrape les bonus sans te faire percuter</p>
+          </div>
+          <div>
+            <span class="badge">Objectif</span>
+            <p>Atteins 10 bonus pour gagner</p>
+          </div>
+          <div>
+            <span class="badge">Sprint</span>
+            <p>Maintiens Shift pour aller plus vite</p>
+          </div>
+        </div>
+      </div>
+      <div class="stats">
+        <div>
+          <p class="label">PNJ à lunettes</p>
+          <p id="npcCount" class="value">0</p>
+        </div>
+        <div>
+          <p class="label">Joueurs actifs</p>
+          <p id="playerCount" class="value">0</p>
+        </div>
+        <div>
+          <p class="label">Bonus récupérés</p>
+          <p id="score" class="value">0</p>
+        </div>
+        <div>
+          <p class="label">Heure</p>
+          <p id="time" class="value">--:--</p>
+        </div>
+        <div class="progress">
+          <div class="progress-bar" id="progressBar"></div>
+          <p class="progress-label">Progression vers la victoire</p>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="game-shell">
+        <canvas id="city" width="960" height="540" aria-label="Ville Free City"></canvas>
+        <div class="actions">
+          <button id="togglePause" class="secondary">Pause</button>
+          <button id="resetGame" class="secondary">Recommencer</button>
+          <button id="toggleTheme" class="secondary">Mode nuit</button>
+        </div>
+        <div class="overlay" id="overlay">
+          <h2>Entrer dans Free City</h2>
+          <p>
+            La ville est vivante : les PNJ portent des lunettes de soleil, les joueurs réels se
+            déplacent librement. Attrape les bonus, évite les voitures et gagne la partie !
+          </p>
+          <button id="start">Démarrer la scène</button>
+        </div>
+        <div class="toast" id="toast" aria-live="polite"></div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="game-3d.js"></script>
+</body>
+</html>
